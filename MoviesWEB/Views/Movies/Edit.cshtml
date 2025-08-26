@@ -1,0 +1,80 @@
+﻿@model MoviesWEB.Models.CreateAndUpdateMovie
+
+@{
+    ViewData["Title"] = "Edit Movie";
+}
+
+<h2>Edit Movie</h2>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@using (Html.BeginForm("Edit", "Movies", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Duration)
+        @Html.TextBoxFor(m => m.Duration, new { @class = "form-control", type = "number" })
+        @Html.ValidationMessageFor(m => m.Duration, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Release_Date)
+        @Html.TextBoxFor(m => m.Release_Date, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.Release_Date, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Amount)
+        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", type = "number", step = "0.01" })
+        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Poster_Path)
+        @Html.TextBoxFor(m => m.Poster_Path, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Poster_Path, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Plot)
+        @Html.TextBoxFor(m => m.Plot, new { @class = "form-control", rows = 5 })
+        @Html.ValidationMessageFor(m => m.Plot, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Actors)
+        @Html.TextBoxFor(m => m.Actors, new { @class = "form-control", rows = 3 })
+        @Html.ValidationMessageFor(m => m.Actors, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Directors)
+        @Html.TextBoxFor(m => m.Directors, new { @class = "form-control", rows = 3 })
+        @Html.ValidationMessageFor(m => m.Directors, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Genres)
+        @Html.ListBoxFor(m => m.Genres, (MultiSelectList)ViewBag.Genres, new { @class = "form-control", size = 5 })
+        @Html.ValidationMessageFor(m => m.Genres)
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+}
+
+<form id="deleteForm" asp-action="Delete" asp-controller="Movies" method="post" class="d-inline">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-danger mt-3"
+            onclick="return confirm('Are you sure you want to delete this movie?');">
+        Delete
+    </button>
+</form>

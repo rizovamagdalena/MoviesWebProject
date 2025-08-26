@@ -1,0 +1,108 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #242222;
+    color: #fff; 
+}
+
+.card-body {
+    background-color: #4f4a4a;
+    color: #fff4f4;
+}
+
+.movie-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    border-radius: 12px;
+}
+
+.movie-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.movie-img {
+    height: 350px;
+    object-fit: fill;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.movie-poster {
+    width: 100%; 
+    height: 400px; 
+    object-fit: fill;
+    border-radius: 8px;
+}
+
+.card-title {
+    color: #fff4f4 !important;
+    font-weight: 600;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: #fff4f4;
+}
+
+h2 {
+    font-weight: bold;
+    color: #fff4f4;
+}
+
+.btn-group {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.more-info {
+    color: #fff4f4;
+}
+
+.genre-dropdown {
+    background-color: #2b2b2b !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+    border-radius: 8px;
+}
+
+.genre-dropdown:focus {
+    background-color: #2b2b2b !important;
+    color: #ffffff !important;
+    border-color: #888 !important;
+    box-shadow: none !important;
+}
+
+.genre-dropdown option {
+    background-color: #2b2b2b !important;
+    color: #ffffff !important;
+}
+
+.rating-badge {
+    background-color: rgba(255, 215, 0, 0.9);
+    color: #000;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    z-index: 10;
+}

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<MoviesWEB.Models.Movie>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .rating-badge {
+        background-color: rgba(255, 215, 0, 0.9);
+        color: #000;
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.9rem;
+        z-index: 10;
+    }
+
+    .movie-card img {
+        object-fit: cover;
+        height: 400px;
+    }
+</style>
+
+<div class="container mt-4">
+    @if (User.IsInRole("Administrator"))
+    {
+        <div class="text-center mb-3">
+            <a class="btn btn-primary text-center" href="@Url.Action("Create", "Movies")">Add New Movie</a>
+        </div>
+    }
+
+    <h2 class="mb-4 text-center">🎬 Our Movie Collection</h2>
+
+    <form method="get" asp-action="Index" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <select name="genre" class="form-select genre-dropdown" onchange="this.form.submit()">
+                    <option value="All" selected="@(ViewBag.SelectedGenre == "All" ? "selected" : null)">All</option>
+                    @foreach (var g in (List<string>)ViewData["genres"])
+                    {
+                        <option value="@g" selected="@(ViewBag.SelectedGenre == g ? "selected" : null)">
+                            @g
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        @foreach (var movie in Model)
+        {
+            <div class="col-md-3">
+                <div class="card movie-card h-100 bg-white shadow-sm position-relative">
+
+                    <!-- Rating Badge -->
+                    <span class="rating-badge position-absolute top-0 start-0 m-2">
+                        ⭐ @movie.Rating.ToString("0.0")
+                    </span>
+
+                    <img src="@movie.Poster_Path" class="card-img-top movie-img" alt="@movie.Name" />
+
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a href="@Url.Action("Edit", "Movies", new { id = movie.Id })"
+                           class="btn btn-sm btn-primary position-absolute top-0 end-0 m-2"
+                           title="Edit movie">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    }
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@movie.Name</h5>
+                        <p class="card-text">
+                            <strong>🎞 Duration:</strong> @movie.Duration min<br />
+                            <strong>🎭 Genres:</strong> @movie.Genres
+                        </p>
+
+                        <div class="btn-group mt-auto">
+                            <a href="@Url.Action("Details", "Movies", new { id = movie.Id })"
+                               class="btn btn-outline-secondary more-info">
+                                More Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

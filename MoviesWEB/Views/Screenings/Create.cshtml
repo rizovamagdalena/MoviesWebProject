@@ -1,0 +1,99 @@
+﻿@model MoviesWEB.Models.CreateScreening
+
+@{
+    ViewData["Title"] = "Create Screening";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4 rounded">
+                <h3 class="text-center mb-4">Create Screening</h3>
+
+                @using (Html.BeginForm("Create", "Screenings", FormMethod.Post, new { id = "createScreeningForm" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Movie_Id)
+                        @Html.DropDownList("Movie_Id", (SelectList)ViewBag.Movies, "Select a Movie", new { @class = "form-control", id = "Movie_Id" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Hall_Id)
+                        @Html.DropDownList("Hall_Id", (SelectList)ViewBag.Halls, "Select a Hall", new { @class = "form-control", id = "Hall_Id" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ScreeningDate">Date</label>
+                        <input id="ScreeningDate" name="Screening_Date_Time" type="date" class="form-control" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ScreeningTime">Time Slot</label>
+                        <select id="ScreeningTime" name="Time" class="form-control"></select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Create Screening</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        const hallDropdown = document.getElementById('Hall_Id');
+        const dateInput = document.getElementById('ScreeningDate');
+        const timeSelect = document.getElementById('ScreeningTime');
+
+        async function loadTimeSlots() {
+            const hallId = hallDropdown.value;
+            const date = dateInput.value;
+            console.log("loadTimeSlots called")
+
+            if (!hallId || !date) {
+                timeSelect.innerHTML = '<option value="">Select hall and date first</option>';
+                return;
+            }
+
+            try {
+
+                console.log("before response")
+                const response = await fetch(`/Screenings/GetAvailableTimeSlots?hallId=${hallId}&date=${date}`);
+                if(!response.ok)
+                {
+                    timeSelect.innerHTML = '<option value="">Error loading slots</option>';
+                    return;
+                }
+                console.log(" response: "+ response)
+
+                const slots = await response.json();
+
+                timeSelect.innerHTML = '';
+                if (slots.length === 0)
+                {
+                    timeSelect.innerHTML = '<option value="">No available slots</option>';
+                } 
+                else
+                {
+                    slots.forEach(slot => {
+                        const opt = document.createElement('option');
+                        opt.value = slot;
+                        opt.text = slot;
+                        timeSelect.appendChild(opt);
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                timeSelect.innerHTML = '<option value="">Error loading slots</option>';
+            }
+        }
+
+        hallDropdown.addEventListener('change', loadTimeSlots);
+        dateInput.addEventListener('change', loadTimeSlots);
+        window.addEventListener('DOMContentLoaded', loadTimeSlots);
+    </script>
+}

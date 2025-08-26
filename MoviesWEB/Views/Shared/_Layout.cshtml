@@ -1,0 +1,203 @@
+﻿<style>
+    #searchResults {
+        position: absolute;
+        background: white;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 0 0 .25rem .25rem;
+        z-index: 1050;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+    }
+
+        #searchResults.show {
+            display: block;
+        }
+
+        #searchResults .dropdown-item img {
+            border-radius: 4px;
+        }
+
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MoviesWEB</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <style>
+        body.default-bg {
+            background-image: url('/images/cinema-bg.jpg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: repeat;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+        }
+
+        body.default-bg::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: -1;
+            }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.5); 
+        }
+
+        .navbar .navbar-brand,
+        .navbar .nav-link {
+            color: #fff !important;
+        }
+
+        .navbar .nav-link:hover {
+            color: #ff4757 !important; 
+        }
+    </style>
+
+</head>
+
+<body class="@(ViewData["BodyClass"] ?? "default-bg")">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light shadow-sm mb-4">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">PopcornPass</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                            <li class="nav-item p-2">
+                                <a class="nav-link" asp-controller="Movies" asp-action="Index">Our Movie Collection</a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a>
+                            </li>
+                            <li class="nav-item p-2">
+                                <a class="nav-link" asp-controller="Tickets" asp-action="MyProfile">My Profile</a>
+                            </li>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item p-2">
+                                    <a class="nav-link" asp-controller="Screenings" asp-action="Index">Manage Screenings</a>
+                                </li>
+                                <li class="nav-item p-2">
+                                    <a class="nav-link" asp-controller="Movies" asp-action="FutureMovies">Manage Future Movies</a>
+                                </li>
+                                <li class="nav-item p-2">
+                                    <a class="nav-link" asp-controller="Tickets" asp-action="AllTickets">Manage Tickets</a>
+                                </li>
+                            }
+                        </ul>
+                        <a asp-controller="Screenings" asp-action="ShoppingCart" class="cart-icon">
+                            <i class="bi bi-cart-fill p-2" style="font-size: 1.8rem; color: #942f28"></i>
+                        </a>
+
+                        <!-- Search Form -->
+                        <form class="d-flex position-relative" onsubmit="return false;">
+                            <input id="movieSearchInput" class="form-control me-2" type="search" placeholder="Search movies..." autocomplete="off" />
+                            <button class="btn btn-outline-light" type="submit">🔍</button>
+
+                            <!-- Container for search results -->
+                            <div id="searchResults" class="dropdown-menu" style="width: 300px; max-height: 300px; overflow-y: auto;"></div>
+                        </form>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light">Logout</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                            <li class="nav-item p-2">
+                            </li>
+                        </ul>
+
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light ms-2">Login</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light ms-2">Register</a>
+                    </div>
+                }
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mb-5">
+        @RenderBody()
+    </main>
+
+
+    <footer class="footer py-3 border-top text-center">
+        <div class="container">
+            &copy; 2025 - MoviesWEB
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function() {
+            const $input = $('#movieSearchInput');
+            const $results = $('#searchResults');
+
+            $input.on('input', function() {
+                const query = $(this).val().trim();
+
+                if (query.length === 0) {
+                    $results.empty().removeClass('show');
+                    return;
+                }
+
+                $.getJSON('/Movies/Search', { query: query }, function(data) {
+                    console.log(data);
+                    $results.empty();
+
+                    if (data.length === 0) {
+                        $results.append('<div class="dropdown-item disabled">No movies found</div>');
+                    } else {
+                        data.forEach(movie => {
+                        console.log(movie.Id, movie.name, movie.poster_Path); // check these in console
+                            $results.append(`
+                                <a href="/Movies/Details/${movie.id}" class="dropdown-item d-flex align-items-center">
+                                    <img src="${movie.poster_Path}" alt="${movie.name}" style="width:40px; height:60px; object-fit:cover; margin-right:10px;" />
+                                    <span>${movie.name}</span>
+                                </a>
+                            `);
+                        });
+                    }
+
+                    $results.addClass('show');
+                });
+            });
+
+            // Hide dropdown when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#movieSearchInput, #searchResults').length) {
+                    $results.removeClass('show');
+                }
+            });
+        });
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

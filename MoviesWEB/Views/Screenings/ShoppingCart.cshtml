@@ -1,0 +1,254 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<MoviesWEB.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<style>
+    .cart-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+        color: #000;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+        color: #000;
+    }
+
+    th {
+        background-color: #007BFF;
+        color: white;
+    }
+
+    .total-row td {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .btn-buy {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-buy:hover {
+        background-color: #218838;
+    }
+
+    h2 {
+          color: #000;
+    }
+</style>
+<form id="antiForgeryForm">
+    @Html.AntiForgeryToken()
+</form>
+
+<div class="cart-container">
+    <h2>Your Shopping Cart</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <p>Your cart is empty.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Screening Time</th>
+                    <th>Quantity</th>
+                    <th>Price per Ticket</th>
+                    <th>Subtotal</th>
+                    <th>Seat Numbers</th>
+                    <th>Action</th> 
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal total = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    var subtotal = item.Quantity * item.PricePerTicket;
+                    total += subtotal;
+
+                    <tr>
+                        <td>@item.MovieName</td>
+                        <td>@item.ScreeningTime.ToString("MMMM dd, yyyy - hh:mm tt")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.PricePerTicket.ToString("C")</td> 
+                        <td>@subtotal.ToString("C")</td>   
+                        <td>
+                            @if (item.SeatNumbers != null && item.SeatNumbers.Any())
+                            {
+                                @string.Join(", ", item.SeatNumbers)
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>
+                        <button class="btn btn-danger btn-sm btn-remove" data-screening-id="@item.ScreeningId">
+                            ❌ Remove
+                        </button>
+                    </td>
+                    </tr>
+                }
+                <tr class="total-row">
+                    <td colspan="4" style="text-align:right">Total:</td>
+                    <td>@total.ToString("C")</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true"> 
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header bg-light text-dark">
+                <h5 class="modal-title" id="paymentModalLabel">Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body bg-light text-dark">
+                <form id="mockPaymentForm">
+                  <div class="mb-3">
+                    <label for="cardHolder" class="form-label">Cardholder Name</label>
+                    <input type="text" class="form-control" id="cardHolder" placeholder="John Doe" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="expiry" class="form-label">Expiry</label>
+                      <input type="text" class="form-control" id="expiry" placeholder="MM/YY" required>
+                    </div>
+                    <div class="col mb-3">
+                      <label for="cvc" class="form-label">CVC</label>
+                      <input type="text" class="form-control" id="cvc" placeholder="123" required>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <strong>Total: <span id="totalAmount"></span></strong>
+                  </div>
+                  <div class="mt-3 text-end">
+                    <button type="submit" class="btn btn-success">Pay</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <button type="button" id="btn-buy" class="btn-buy">Buy</button>
+
+    }
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.querySelector('.cart-container').addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-remove')) {
+            const screeningId = parseInt(e.target.dataset.screeningId);
+
+            fetch('/Screenings/RemoveFromCart/' + screeningId, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Item removed from cart!');
+                    location.reload();
+                } else {
+                    alert('Error removing item: ' + data.message);
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    });
+
+    document.getElementById('btn-buy').addEventListener('click', function() {
+        var cartItems = (@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))) || [];
+        console.log("Cart items from Details page:", cartItems);
+
+        if (!cartItems.length) {
+            alert("Cart is empty!");
+            return;
+        }
+
+         let total = cartItems.reduce((sum, item) => sum + (item.Quantity * item.PricePerTicket), 0);
+            document.getElementById('totalAmount').innerText = "$" + total.toFixed(2);
+
+            var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            paymentModal.show();
+    });
+
+    document.getElementById('mockPaymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    alert("Payment successful! Booking seats...");
+
+    var cartItems = (@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))) || [];
+    let allSuccess = true;
+
+    const bookingPromises = cartItems.map(item => {
+        var screeningId = item.ScreeningId;
+        var seatIds = item.SeatIds;
+
+        return fetch('/Tickets/BookSeats/' + screeningId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: JSON.stringify({screeningId: screeningId, seatIds: seatIds})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) allSuccess = false;
+        })
+        .catch(() => allSuccess = false);
+    });
+
+    Promise.all(bookingPromises).then(() => {
+        if (allSuccess) {
+            alert("Seats booked successfully!");
+            fetch('/Tickets/ClearCart', { method: 'POST', headers: { 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value } })
+                .then(() => location.reload());
+        } else {
+            alert("Some bookings failed.");
+        }
+    });
+
+    bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+});
+
+</script>

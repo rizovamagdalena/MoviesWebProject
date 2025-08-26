@@ -1,0 +1,265 @@
+﻿@model IEnumerable<MoviesWEB.Models.ShowScreening>
+@{
+    ViewData["Title"] = "Home - Popcorn Pass";
+}
+
+<style>
+     body {
+        position: relative;
+        background-image: url("/images/cinema-bg.jpg");
+        background-size: cover; 
+        background-position: center; 
+        background-repeat: no-repeat;
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    body::before {
+         content: "";
+         position: fixed; 
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(0, 0, 0, 0.5); 
+         z-index: -1; 
+        } */
+
+    .hero-wrapper {
+        display: flex;
+        justify-content: center; 
+        padding-top: 100px; 
+        width: 100%;
+    }
+
+    .hero {
+        text-align: center;
+        max-width: 900px; 
+        color: #fff;
+    }
+
+     .hero h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6)
+     }
+
+     .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: #f1f1f1;
+     }
+
+     .hero .btn {
+         margin: 10px;
+         padding: 12px 20px;
+         font-size: 1rem;
+         border-radius: 25px;
+         transition: all 0.3s ease;
+     }
+
+     .hero .btn-primary {
+         background-color: #ff4757;
+         border: none;
+     }
+
+     .hero .btn-primary:hover {
+         background-color: #ff6b81;
+     }
+
+    .movies-section {
+        margin-top: 50px;
+    }
+
+    .nav-tabs .nav-link {
+        color: white !important;
+    }
+
+    .nav-tabs .nav-link.active {
+    color: #000 !important;
+    background-color: white !important; 
+
+    }   
+
+
+    .movie-img {
+        height: 350px;
+        object-fit: cover; 
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+  
+    .rating-badge {
+        background-color: rgba(255, 215, 0, 0.9);
+        color: #000;
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.9rem;
+        z-index: 10;
+    }
+</style>
+
+<div class="hero-wrapper d-flex justify-content-center">
+    <div class="hero">
+        <h1>Welcome to Popcorn Pass 🍿</h1>
+        <p>Your ticket to the best movie experiences at StarLight Cinemas!</p>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a href="/Account/Register" class="btn btn-primary">Register Today</a>
+            <a href="/Account/Login" class="btn btn-light">Login</a>
+        }
+    </div>
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container mt-5">
+
+        <ul class="nav nav-tabs justify-content-center" id="homeTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link" id="recommended-tab" data-bs-toggle="tab" data-bs-target="#recommended" type="button" role="tab">Recommended</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link active" id="in-cinemas-tab" data-bs-toggle="tab" data-bs-target="#in-cinemas" type="button" role="tab">Today in our Cinema</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="soon-tab" data-bs-toggle="tab" data-bs-target="#soon" type="button" role="tab">Soon</button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4">
+
+           
+            <div class="tab-pane fade" id="recommended" role="tabpanel">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+                    @foreach (var movie in ViewData["TopMovies"] as IEnumerable<MoviesWEB.Models.Movie>)
+                    {
+                        <div class="col-md-3">
+                            <div class="card movie-card h-100 bg-white shadow-sm position-relative">
+
+                                <span class="rating-badge position-absolute top-0 start-0 m-2 bg-yellow">
+                                    ⭐ @(movie.Rating.ToString("0.0") ?? "N/A")
+                                </span>
+
+                                <img src="@movie.Poster_Path" class="card-img-top movie-img" alt="@movie.Name" />
+
+                                <div class="card-body d-flex flex-column">
+                                    <div class="btn-group mt-auto">
+                                        <a href="/Movies/Details/@movie.Id" class="btn btn-outline-secondary more-info">
+                                            More Info
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="tab-pane fade show active" id="in-cinemas" role="tabpanel">
+                <div class="mb-4 text-center">
+                    <label for="datePicker" class="form-label fw-bold fs-5">Choose Another Date:</label>
+                    <input type="date" id="datePicker"
+                           class="form-control form-control-lg w-auto d-inline-block shadow-sm"
+                           min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                </div>
+
+                <div class="row justify-content-center" id="moviesList">
+                    @foreach (var movie in Model)
+                    {
+                        <div class="col-md-3 mb-4" data-date="@movie.Screening_Date_Time.ToString("yyyy-MM-dd")">
+                            <div class="card movie-card h-100 shadow-sm">
+                                <img src="@movie.Movie.Poster_Path" class="card-img-top movie-img" alt="@movie.Movie.Name" />
+                                <div class="card-body d-flex flex-column text-center">
+                                    <h5 class="card-title">@movie.Movie.Name</h5>
+                                    <p class="card-text">🎬 @movie.Screening_Date_Time.ToString("HH:mm")</p>
+                                    <div class="btn-group mt-auto">
+                                        <a href="/Movies/Details/@movie.Movie.Id" class="btn btn-outline-secondary more-info">Info</a>
+                                        <a href="/Screenings/Details/@movie.Id" class="btn btn-outline-secondary more-info">Tickets</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="soon" role="tabpanel">
+                <div class="text-center mb-4">
+                    <h4>Coming Soon</h4>
+                </div>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    @foreach (var movie in ViewData["FutureMovies"] as IEnumerable<MoviesWEB.Models.FutureMovie>)
+                    {
+                        <div class="col movie-card-item">
+                            <div class="card movie-card h-100 bg-dark shadow-sm">
+                                <img src="@movie.Poster_Path" class="card-img-top movie-img" alt="@movie.Name" />
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">@movie.Name</h5>
+                                    <p class="card-text">
+                                        <strong>🎭 Genres:</strong> @movie.Genres
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Now Showing In Our Cinema 🍿</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            @foreach (var movie in Model)
+            {
+                <div class="col-md-3">
+                    <div class="card movie-card h-100">
+                        <a href="@Url.Action("Login", "Account")">
+                            <img src="@movie.Movie.Poster_Path" class="card-img-top" alt="@movie.Movie.Name" />
+                        </a>
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@movie.Movie.Name</h5>
+                            <div class="btn-group mt-auto">
+                                <a href="/Account/Login" class="color-white btn-sm btn-white-border more-info">Info</a>
+                                <a href="/Account/Login" class="btn btn-sm btn-white-border more-info">Get Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const datePicker = document.getElementById("datePicker");
+                const movies = document.querySelectorAll(".col-md-3.mb-4");
+
+                function filterMoviesByDate(date) {
+                    movies.forEach(movie => {
+                        movie.style.display = movie.dataset.date === date ? "block" : "none";
+                    });
+                }
+
+                // Initial filter to today
+                filterMoviesByDate(datePicker.value);
+
+                // On change
+                datePicker.addEventListener("change", function () {
+                    filterMoviesByDate(this.value);
+                });
+            });
+        </script>
+    }
+}

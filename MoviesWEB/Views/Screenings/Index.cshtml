@@ -1,0 +1,97 @@
+﻿@model IEnumerable<MoviesWEB.Models.ShowScreening>
+
+@{
+    ViewData["Title"] = "Manage Screenings";
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+
+
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">🎬 Manage Screenings</h2>
+
+    <!-- Date Picker Filter -->
+    <div class="mb-4 text-center">
+        <label for="datePicker" class="form-label fw-bold fs-5">Choose Date:</label>
+        <input type="date" id="datePicker"
+               class="form-control form-control-sm w-auto d-inline-block shadow-sm"
+               value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        <button id="showAllBtn" class="btn btn-outline-secondary btn-sm ms-2 shadow-sm">Show All</button>
+    </div>
+
+    @if (User.IsInRole("Administrator"))
+    {
+        <div class="text-center">
+            <a class="btn btn-primary text-center" href="@Url.Action("Create", "Screenings")">Add New Screening</a>
+        </div>
+    }
+    <!-- Screenings List -->
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3" id="screeningsList">
+        @foreach (var screening in Model)
+        {
+            <div class="col screening-item" data-date="@screening.Screening_Date_Time.ToString("yyyy-MM-dd")">
+                <div class="card h-100 shadow-sm border-0 small-card">
+                    @if (!string.IsNullOrEmpty(screening.Movie?.Poster_Path))
+                    {
+                        <img src="@screening.Movie.Poster_Path" class="card-img-top small-poster" alt="@screening.Movie?.Name" />
+                    }
+
+                    <div class="card-body p-2 text-center">
+                        <h6 class="card-title fw-bold mb-1">@screening.Movie?.Name</h6>
+                        <p class="card-text mb-1" style="font-size: 0.85rem;">
+                            📅 @screening.Screening_Date_Time.ToString("MMM dd, yyyy")<br />
+                            ⏰ @screening.Screening_Date_Time.ToString("HH:mm")
+                        </p>
+                        <a href="@Url.Action("Details", "Screenings", new { id = screening.Id })"
+                           class="btn btn-outline-primary btn-sm rounded-pill mt-1">
+                            More Info
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<style>
+    .small-card {
+        font-size: 0.85rem;
+    }
+
+    .small-poster {
+        height: 180px;
+        object-fit: cover;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        const datePicker = document.getElementById('datePicker');
+        const showAllBtn = document.getElementById('showAllBtn');
+        const screenings = document.querySelectorAll('.screening-item');
+
+        function filterScreenings(date) {
+            screenings.forEach(item => {
+                const itemDate = item.getAttribute('data-date');
+                if (date === "" || itemDate === date) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        datePicker.addEventListener('change', () => {
+            filterScreenings(datePicker.value);
+        });
+
+        showAllBtn.addEventListener('click', () => {
+            datePicker.value = "";
+            filterScreenings("");
+        });
+
+        filterScreenings(datePicker.value);
+    </script>
+}

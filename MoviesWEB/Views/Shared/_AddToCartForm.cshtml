@@ -1,0 +1,15 @@
+﻿@model MoviesWEB.Models.CreateTicket
+
+<form asp-controller="Movies" asp-action="Add" method="post" class="add-to-cart">
+    <input type="hidden" name="Movie_Id" value="@Model.Movie_Id" />
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Quantity</label>
+        <input asp-for="Price" class="form-control" type="number" min="1" value="1" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Watch_Movie" class="form-label">Watch Date</label>
+        <input asp-for="Watch_Movie" class="form-control" type="datetime-local" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add to Cart</button>
+</form>
