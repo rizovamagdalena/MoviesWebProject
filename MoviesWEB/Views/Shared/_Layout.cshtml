@@ -104,18 +104,19 @@
                                 <li class="nav-item p-2">
                                     <a class="nav-link" asp-controller="Tickets" asp-action="AllTickets">Manage Tickets</a>
                                 </li>
+                                <li class="nav-item p-2">
+                                    <a class="nav-link" asp-controller="Faq" asp-action="Index">Manage Faq</a>
+                                </li>
                             }
                         </ul>
                         <a asp-controller="Screenings" asp-action="ShoppingCart" class="cart-icon">
                             <i class="bi bi-cart-fill p-2" style="font-size: 1.8rem; color: #942f28"></i>
                         </a>
 
-                        <!-- Search Form -->
                         <form class="d-flex position-relative" onsubmit="return false;">
                             <input id="movieSearchInput" class="form-control me-2" type="search" placeholder="Search movies..." autocomplete="off" />
                             <button class="btn btn-outline-light" type="submit">🔍</button>
 
-                            <!-- Container for search results -->
                             <div id="searchResults" class="dropdown-menu" style="width: 300px; max-height: 300px; overflow-y: auto;"></div>
                         </form>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
@@ -143,7 +144,7 @@
         @RenderBody()
     </main>
 
-
+    @Html.Partial("_Chatbot")
     <footer class="footer py-3 border-top text-center">
         <div class="container">
             &copy; 2025 - MoviesWEB
@@ -174,7 +175,7 @@
                         $results.append('<div class="dropdown-item disabled">No movies found</div>');
                     } else {
                         data.forEach(movie => {
-                        console.log(movie.Id, movie.name, movie.poster_Path); // check these in console
+                        console.log(movie.Id, movie.name, movie.poster_Path);
                             $results.append(`
                                 <a href="/Movies/Details/${movie.id}" class="dropdown-item d-flex align-items-center">
                                     <img src="${movie.poster_Path}" alt="${movie.name}" style="width:40px; height:60px; object-fit:cover; margin-right:10px;" />
@@ -188,7 +189,6 @@
                 });
             });
 
-            // Hide dropdown when clicking outside
             $(document).on('click', function(e) {
                 if (!$(e.target).closest('#movieSearchInput, #searchResults').length) {
                     $results.removeClass('show');

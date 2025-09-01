@@ -18,12 +18,14 @@ builder.Services.Configure<DbSettings>(
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-builder.Services.AddHttpContextAccessor(); //
+builder.Services.AddHttpContextAccessor(); 
 
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IScreeningService, ScreeningService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IChatBotService, ChatBotService>();
+
 
 
 
@@ -41,7 +43,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";       // redirect here if not logged in
         options.LogoutPath = "/Account/Logout";
-        //options.AccessDeniedPath = "/Account/AccessDenied"; // optional
+        //options.AccessDeniedPath = "/Account/AccessDenied";
         options.Cookie.Name = "MoviesWebCookie";   // optional cookie name
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
     });

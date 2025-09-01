@@ -281,7 +281,7 @@ namespace MoviesWEB.Controllers
 
             HttpContext.Session.SetObjectAsJson("ShoppingCart", cart);
 
-            return Json(new { success = true, message = "Added to cart." });
+            return Json(new { success = true, messege = "Added to cart." });
         }
 
         [HttpPost]
@@ -296,7 +296,7 @@ namespace MoviesWEB.Controllers
                 HttpContext.Session.SetObjectAsJson("ShoppingCart", cart);
                 return Json(new { success = true });
             }
-            return Json(new { success = false, message = "Item not found in cart." });
+            return Json(new { success = false, messege = "Item not found in cart." });
         }
 
 

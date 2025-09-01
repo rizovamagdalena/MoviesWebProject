@@ -1,0 +1,335 @@
+﻿<div id="chatbot-container">
+    <div id="chatbot-button">💬</div>
+
+    <div id="chatbot-window">
+        <div id="chatbot-header">
+            <span>PopcornPass Assistant</span>
+            <span id="chatbot-close">✖</span>
+        </div>
+        <div id="chatbot-body">
+            <div id="faq-categories" style="margin-bottom: 10px;"></div>
+            <div id="faq-list" style="margin-bottom: 10px;"></div>
+            <div id="chatbot-messeges"></div>
+        </div>
+        <div id="chatbot-input">
+            <input type="text" id="chatbot-text" placeholder="Type a messege..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    #chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #chatbot-button {
+        width: 60px;
+        height: 60px;
+        background-color: #ff4500;
+        border-radius: 50%;
+        color: white;
+        text-align: center;
+        line-height: 60px;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        transition: transform 0.2s;
+    }
+
+        #chatbot-button:hover {
+            transform: scale(1.1);
+        }
+
+    #chatbot-window {
+        width: 320px;
+        height: 420px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        position: absolute;
+        bottom: 70px;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        font-size: 14px;
+    }
+
+    #chatbot-header {
+        background: #ff4500;
+        color: white;
+        padding: 12px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px;
+    }
+
+    #chatbot-body {
+        flex: 1;
+        padding: 12px;
+        overflow-y: auto;
+        background: #f4f4f8;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-messege::before {
+        display: block;
+        font-size: 11px;
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+
+    .chat-user::before {
+        content: "You";
+        color: #ff4500;
+    }
+
+    .chat-bot::before {
+        content: "PopcornPass Bot";
+        color: #555;
+    }
+
+
+    .chat-user {
+        background: #ff4500;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 0;
+    }
+
+    #chatbot-messeges {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 6px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-bot {
+    background: #e0e0e0;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+    animation: fadeIn 0.3s ease;
+    }
+
+    #chatbot-input {
+        display: flex;
+        border-top: 1px solid #ccc;
+    }
+
+        #chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #chatbot-input button {
+            padding: 10px 15px;
+            background: #ff4500;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+    #faq-categories button {
+        display: block; 
+        width: 100%;
+        margin-bottom: 5px; 
+        padding: 8px;
+        background-color: #ffcccb; 
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        text-align: left;
+    }
+
+     #faq-categories button:hover {
+            background-color: #ff9999; 
+     }
+
+    #faq-list button {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+        padding: 6px;
+        background-color: #d0e0ff; 
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: left;
+    }
+
+     #faq-list button:hover {
+            background-color: #a0c0ff; 
+     }
+
+
+</style>
+
+<script>
+    const chatbotButton = document.getElementById('chatbot-button');
+    const chatbotWindow = document.getElementById('chatbot-window');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotSend = document.getElementById('chatbot-send');
+    const chatbotText = document.getElementById('chatbot-text');
+    const chatbotMesseges = document.getElementById('chatbot-messeges');
+
+    let chatHistory = [];
+
+    chatbotButton.addEventListener('click', () => {
+        chatbotWindow.style.display = 'flex';
+        chatbotButton.style.display = 'none';
+        loadFaqs();
+        chatbotText.focus();
+    });
+
+    chatbotClose.addEventListener('click', () => {
+        chatbotWindow.style.display = 'none';
+        chatbotButton.style.display = 'block';
+    });
+
+    chatbotSend.addEventListener('click', sendMessege);
+    chatbotText.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessege();
+    });
+
+    function sendMessege() {
+        const messege = chatbotText.value.trim();
+        if (!messege) return;
+
+        const userMsg = document.createElement('div');
+        userMsg.textContent = messege;
+        userMsg.classList.add('chat-messege', 'chat-user');
+        chatbotMesseges.appendChild(userMsg);
+
+        chatbotText.value = '';
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+        chatHistory.push({ role: 'user', content: messege });
+
+        const typingMsg = document.createElement('div');
+        typingMsg.textContent = "PopcornPass Bot is typing...";
+        typingMsg.classList.add('chat-messege', 'chat-bot');
+        chatbotMessages.appendChild(typingMsg);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+        fetch('/ChatBot/Ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: messege })
+        })
+        .then(res => res.json())
+        .then(data => {
+            typingMsg.remove();
+            const botMsg = document.createElement('div');
+            botMsg.textContent = data.answer; 
+            botMsg.classList.add('chat-messege', 'chat-bot');
+            chatbotMessages.appendChild(botMsg);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            chatHistory.push({ role: 'assistant', content: data.answer });
+        })
+        .catch(err => {
+            typingMsg.remove();
+            const botMsg = document.createElement('div');
+            botMsg.textContent = "Oops! Something went wrong.";
+            botMsg.classList.add('chat-messege', 'chat-bot');
+            chatbotMessages.appendChild(botMsg);
+        });
+    }
+
+
+    let allFaqs = [];
+
+    async function loadFaqs() {
+        const response = await fetch('/ChatBot/Faqs');
+        const data = await response.json();
+        allFaqs = data.faqs;
+        console.log("API response:", data);
+        displayCategories();
+    }
+
+    function displayCategories() {
+        const container = document.getElementById('faq-categories');
+        container.innerHTML = '';
+
+        const categories = [...new Set(allFaqs.map(f => f.category))];
+        console.log("categories mapped:", categories);
+        categories.forEach(category => {
+            const btn = document.createElement('button');
+            btn.textContent = category;
+            btn.onclick = () => displayFaqs(category);
+            container.appendChild(btn);
+        });
+    }
+
+    function displayFaqs(category) {
+        const faqList = document.getElementById('faq-list');
+        faqList.innerHTML = '';
+
+        const faqsInCategory = allFaqs.filter(f => f.category === category);
+
+        faqsInCategory.forEach(faq => {
+            const btn = document.createElement('button');
+            btn.textContent = faq.question;
+            btn.onclick = () => sendFaqToChat(faq);
+            faqList.appendChild(btn);
+        });
+    }
+
+    function sendFaqToChat(faq) {
+        const userMsg = document.createElement('div');
+        userMsg.textContent = faq.question;
+        userMsg.classList.add('chat-messege', 'chat-user');
+        chatbotMessages.appendChild(userMsg);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+        chatHistory.push({ role: 'user', content: faq.question });
+
+        const typingMsg = document.createElement('div');
+        typingMsg.textContent = "PopcornPass Bot is typing...";
+        typingMsg.classList.add('chat-messege', 'chat-bot');
+        chatbotMesseges.appendChild(typingMsg);
+        chatbotMesseges.scrollTop = chatbotMesseges.scrollHeight;
+
+        fetch('/ChatBot/Ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: faq.question })
+        })
+        .then(res => res.json())
+        .then(data => {
+            typingMsg.remove();
+            const botMsg = document.createElement('div');
+            botMsg.textContent = data.answer;
+            botMsg.classList.add('chat-messege', 'chat-bot');
+            chatbotMessages.appendChild(botMsg);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            chatHistory.push({ role: 'assistant', content: data.answer });
+        })
+        .catch(() => {
+            typingMsg.remove();
+            const botMsg = document.createElement('div');
+            botMsg.textContent = "Oops! Something went wrong.";
+            botMsg.classList.add('chat-messege', 'chat-bot');
+            chatbotMessages.appendChild(botMsg);
+        });
+    }
+
+
+
+
+
+</script>

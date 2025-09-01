@@ -167,7 +167,9 @@ namespace MoviesWEB.Controllers
                         identity.AddClaim(new Claim("Phone", model.Phone));
                     }
 
+
                     // Refresh the authentication cookie
+
                     await HttpContext.SignOutAsync();
                     await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
 
