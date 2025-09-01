@@ -158,25 +158,7 @@ namespace MoviesWEB.Controllers
             return View(viewTickets);
         }
 
-        public async Task<IActionResult> MyProfile()
-        {
-            var nameClaim = User.FindFirst(ClaimTypes.Name);
-            var phoneClaim = User.FindFirst("Phone"); 
-            var usernameClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (usernameClaim == null)
-                return Unauthorized();
-
-            var profile = new UserProfile
-            {
-                Name = nameClaim?.Value ?? "Unknown",
-                Phone = phoneClaim?.Value ?? "N/A",
-                Username = usernameClaim.Value
-            };
-
-            return View(profile);
-        }
-
+    
 
     }
 }

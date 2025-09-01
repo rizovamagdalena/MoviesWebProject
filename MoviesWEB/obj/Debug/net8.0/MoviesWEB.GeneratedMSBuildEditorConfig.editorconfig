@@ -28,8 +28,16 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Account/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Account/MyProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxNeVByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Account/Register.cshtml]
@@ -106,10 +114,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Tickets/AllTickets.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0c1xBbGxUaWNrZXRzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Tickets/MyProfile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0c1xNeVByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/rizov/VisualStudioProjects/MoviesWEB/MoviesWEB/Views/Tickets/MyTickets.cshtml]

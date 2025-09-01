@@ -9,5 +9,6 @@ namespace MoviesWEB.Service.Interface
         Task<LoginResponse> CheckUserCredidentals(LoginRequest loginRequest);
         Task<bool> LogoutUser(string username);
         Task<bool> TryRegisterRequest(RegisterRequest registerRequest);
+        Task<bool> UpdateUserProfileAsync(UserProfile userProfile);
     }
 }

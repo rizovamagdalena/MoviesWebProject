@@ -15,6 +15,17 @@
         color: #dc3545; 
         font-weight: 600;
     }
+
+     .review-box {
+        background-color: #222;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .review-box strong {
+        color: #ffc107;
+    }
 </style>
 
 <div class="container mt-4 movie-details-container">
@@ -34,8 +45,8 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="upcoming-screenings" style="margin-top: 20px;">
+            <div class="row mt-4">
+                <div class="upcoming-screenings">
                     <h5>Upcoming Screenings</h5>
                     @if (Model.Screenings != null && Model.Screenings.Any())
                     {
@@ -54,6 +65,28 @@
                     else
                     {
                         <p>No upcoming screenings.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Reviews Section -->
+                <div class="row mt-4">
+                    <h5 class="mb-3">Reviews</h5>
+
+                    @if (Model.Movie.Ratings != null && Model.Movie.Ratings.Any())
+                    {
+                        foreach (var rating in Model.Movie.Ratings)
+                        {
+                            <div class="review-box">
+                                <strong>@rating.UserName</strong> rated <strong>@rating.Rating/10 ⭐</strong>
+                                <p>@rating.Comment</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No reviews yet. Be the first to review this movie!</p>
                     }
                 </div>
             </div>
@@ -101,19 +134,29 @@
             <div class="side-section">
                 <h5>Rating</h5>
                 <p><strong>Average Rating:</strong> <span id="avgRating">@Model.Movie.Rating.ToString("0.0")</span> ⭐</p>
-
-                <div class="d-flex align-items-center gap-2">
-                    <label for="ratingSelect" class="mb-0">Your Rating:</label>
+                <br />
+                <div class="mb-3">
+                    <label for="ratingSelect" class="mb-1">Your Rating:</label>
                     <select id="ratingSelect" name="rating" class="form-select form-select-sm" style="width: 80px;">
                         @for (int i = 1; i <= 10; i++)
                         {
-                            <option value="@i" selected="@(Model.Movie.UserRating == i ? "selected" : null)">
-                                @i
-                            </option>
+                            var isSelected = (Model.Movie.UserRating != null && Model.Movie.UserRating.Rating == i)
+                            ? "selected"
+                            : null;
+
+                            <option value="@i" selected="@isSelected">@i</option>
                         }
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <label for="commentInput" class="mb-1">Your Review:</label>
+                    <textarea id="commentInput" class="form-control form-control-sm" rows="3">@Model.Movie.UserRating?.Comment</textarea>
+                </div>
+
+                <button id="saveReviewBtn" class="btn btn-sm btn-primary">Save Review</button>
             </div>
+
         </div>
     </div>
 </div>
@@ -122,28 +165,25 @@
     <script>
         const movieId = @Model.Movie.Id;
         const ratingSelect = document.getElementById('ratingSelect');
+        const commentInput = document.getElementById('commentInput');
+        const saveBtn = document.getElementById('saveReviewBtn');
 
-        ratingSelect.addEventListener('change', async () => {
+        saveBtn.addEventListener('click', async () => {
             const rating = parseInt(ratingSelect.value);
-            console.log("CHNAGE")
-
+            const comment = commentInput.value;
 
             const response = await fetch('/Movies/UpdateRating', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
-                body: JSON.stringify({ movieId: movieId, rating: rating })
+                body: JSON.stringify({ movieId: movieId, rating: rating, comment: comment })
             });
 
             const result = await response.json();
-            console.log("result: "+result)
-
             if (result.success) {
-                console.log("saved")
                 location.reload();
             } else {
-                console.log("failed")
-                alert('Failed to save rating.');
+                alert('Failed to save review.');
             }
         });
     </script>

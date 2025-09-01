@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.Extensions.Options;
 using MoviesWEB.Controllers;
 using MoviesWEB.Models;
@@ -40,17 +41,17 @@ namespace MoviesWEB.Service.Implementation
                 var response = await _client.GetAsync($"{_apiBaseUrl}/api/movies/{movie.Id}/rating/{userId}");
                 if (response.IsSuccessStatusCode)
                 {
-                    var rating = await response.Content.ReadFromJsonAsync<int>();
+                    var rating = await response.Content.ReadFromJsonAsync<MovieRating>();
                     movie.UserRating = rating;
                 }
                 else
                 {
-                    movie.UserRating = 0;
+                    movie.UserRating = null;
                 }
             }
             else
             {
-                movie.UserRating = 0;
+                movie.UserRating = null;
             }
         }
 
@@ -210,9 +211,17 @@ namespace MoviesWEB.Service.Implementation
             return JsonConvert.DeserializeObject<List<string>>(json) ?? new List<string>();
         }
 
-        public async Task<(bool success, string message)> UpdateUserRating(long movieId, long userId, int rating)
+        public async Task<(bool success, string message)> UpdateUserRating(long movieId, long userId, int rating,string comment)
         {
-            var response = await _client.PutAsync($"{_apiBaseUrl}/api/movies/{movieId}/rating?userId={userId}&rating={rating}", null);
+            var info = new CreateRating
+            {
+                MovieId = movieId,   
+                UserId = userId,
+                Rating = rating,
+                Comment = comment
+            };
+
+            var response = await _client.PutAsJsonAsync($"{_apiBaseUrl}/api/movies/{movieId}/rating", info);
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -222,7 +231,7 @@ namespace MoviesWEB.Service.Implementation
             return (false, content);
         }
 
-        public async Task<int> GetUserRatingForMovie(long movieId,long userId)
+        public async Task<MovieRating> GetUserRatingForMovie(long movieId,long userId)
         {
             System.Diagnostics.Debug.WriteLine($"in :GetUserRatingForMovie ");
 
@@ -235,11 +244,12 @@ namespace MoviesWEB.Service.Implementation
 
 
             if (!response.IsSuccessStatusCode)
-                return 0;
+                return null;
 
-            var userRating = await response.Content.ReadFromJsonAsync<int>();
+            var userRating = await response.Content.ReadFromJsonAsync<MovieRating>();
             System.Diagnostics.Debug.WriteLine($"readmform json:{userRating}  ");
 
+            
             return userRating;
         }
 

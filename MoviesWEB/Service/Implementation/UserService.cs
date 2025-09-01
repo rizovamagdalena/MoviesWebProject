@@ -5,6 +5,7 @@ using MoviesWEB.Service.Interface;
 using Newtonsoft.Json;
 using System.Runtime;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MoviesWEB.Service.Implementation
 {
@@ -66,6 +67,19 @@ namespace MoviesWEB.Service.Implementation
                     return false;
                 }
             }
+        }
+
+        public async Task<bool> UpdateUserProfileAsync(UserProfile userProfile)
+        {
+            var content = new MultipartFormDataContent
+            {
+                { new StringContent(userProfile.Name ?? ""), "Name" },
+                { new StringContent(userProfile.Phone ?? ""), "Phone" },
+                { new StringContent(userProfile.Username ?? ""), "Username" }
+            };
+
+            var response = await _client.PutAsync($"{_apiBaseUrl}/api/Users", content);
+            return response.IsSuccessStatusCode;
         }
     }
 }

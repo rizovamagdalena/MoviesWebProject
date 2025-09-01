@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\views\\screenings\\shoppingcart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\views\\screenings\\shoppingcart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\service\\implementation\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\service\\implementation\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\controllers\\moviescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\controllers\\moviescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|c:\\users\\rizov\\visualstudioprojects\\moviesweb\\moviesweb\\views\\screenings\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{810C22C8-D2D1-4782-B71B-BD0FE259B0DC}|MoviesWEB\\MoviesWEB.csproj|solutionrelative:moviesweb\\views\\screenings\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +30,35 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "MoviesWEB\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "MoviesWEB\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T06:39:33.688Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Service\\Implementation\\UserService.cs",
+              "RelativeDocumentMoniker": "MoviesWEB\\Service\\Implementation\\UserService.cs",
+              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Service\\Implementation\\UserService.cs",
+              "RelativeToolTip": "MoviesWEB\\Service\\Implementation\\UserService.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAowEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T07:40:39.357Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
@@ -42,29 +81,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ShoppingCart.cshtml",
-              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Views\\Screenings\\ShoppingCart.cshtml",
-              "RelativeDocumentMoniker": "MoviesWEB\\Views\\Screenings\\ShoppingCart.cshtml",
-              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Views\\Screenings\\ShoppingCart.cshtml",
-              "RelativeToolTip": "MoviesWEB\\Views\\Screenings\\ShoppingCart.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "MoviesWEB\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "MoviesWEB\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAuwKkAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-08-26T09:10:42.994Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-01T06:39:56.993Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "site.css",
-              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "MoviesWEB\\wwwroot\\css\\site.css",
-              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "MoviesWEB\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-08-26T08:58:55.639Z",
-              "EditorCaption": ""
+              "DocumentIndex": 3,
+              "Title": "MoviesController.cs",
+              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Controllers\\MoviesController.cs",
+              "RelativeDocumentMoniker": "MoviesWEB\\Controllers\\MoviesController.cs",
+              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Controllers\\MoviesController.cs",
+              "RelativeToolTip": "MoviesWEB\\Controllers\\MoviesController.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAkwD8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T06:39:21.405Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Views\\Screenings\\Create.cshtml",
+              "RelativeDocumentMoniker": "MoviesWEB\\Views\\Screenings\\Create.cshtml",
+              "ToolTip": "C:\\Users\\rizov\\VisualStudioProjects\\MoviesWEB\\MoviesWEB\\Views\\Screenings\\Create.cshtml",
+              "RelativeToolTip": "MoviesWEB\\Views\\Screenings\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAABdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-01T06:35:57.927Z"
             }
           ]
         }

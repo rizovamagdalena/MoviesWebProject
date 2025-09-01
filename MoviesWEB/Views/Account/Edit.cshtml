@@ -1,0 +1,83 @@
+﻿@model MoviesWEB.Models.System.UserProfile
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<style>
+    body {
+        background-color: #242222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .profile-container {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #1e1e1e;
+        border-radius: 10px;
+    }
+
+    h2 {
+        color: #fff4f4;
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        color: #ff4757;
+        font-weight: bold;
+    }
+
+    .form-control {
+        background-color: #333;
+        border: 1px solid #444;
+        color: #fff;
+    }
+
+    .btn-primary {
+        background-color: #ff4757;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #e84141;
+        }
+
+    .message {
+        margin-bottom: 15px;
+        color: #4cd137;
+    }
+</style>
+
+<div class="profile-container">
+    <h2>Edit Profile</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="message">@TempData["Message"]</div>
+    }
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Username" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Phone</label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="MyProfile" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

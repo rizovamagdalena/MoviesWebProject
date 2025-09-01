@@ -68,7 +68,7 @@ namespace MoviesWEB.Controllers
                                               new ClaimsPrincipal(claimsIdentity),
                                               authProperties);
 
-                return RedirectToAction("Index", "Movies");
+                return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError("", "Invalid username or password");
@@ -117,6 +117,89 @@ namespace MoviesWEB.Controllers
             ModelState.AddModelError("", "Registration failed. Please try again.");
             return View(registerSuccess);
 
+        }
+
+        // GET: Profile/Edit
+        public async Task<IActionResult> Edit()
+        {
+            var nameClaim = User.FindFirst(ClaimTypes.Name);
+            var phoneClaim = User.FindFirst("Phone");
+            var usernameClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (usernameClaim == null)
+                return Unauthorized();
+
+            var profile = new UserProfile
+            {
+                Name = nameClaim?.Value ?? "Unknown",
+                Phone = phoneClaim?.Value ?? "N/A",
+                Username = usernameClaim.Value
+            };
+
+            return View(profile);
+        }
+
+        // POST: Profile/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserProfile model)
+        {
+            if (ModelState.IsValid)
+            {
+                bool updated = await _userService.UpdateUserProfileAsync(model);
+
+                if (updated)
+                {
+                    var identity = (ClaimsIdentity)User.Identity;
+
+                    var nameClaim = identity.FindFirst(ClaimTypes.Name);
+                    var phoneClaim = identity.FindFirst("Phone");
+
+                    if (nameClaim != null)
+                    {
+                        identity.RemoveClaim(nameClaim);
+                        identity.AddClaim(new Claim(ClaimTypes.Name, model.Name));
+                    }
+
+                    if (phoneClaim != null)
+                    {
+                        identity.RemoveClaim(phoneClaim);
+                        identity.AddClaim(new Claim("Phone", model.Phone));
+                    }
+
+                    // Refresh the authentication cookie
+                    await HttpContext.SignOutAsync();
+                    await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
+
+
+                    return RedirectToAction("MyProfile");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Failed to update profile.");
+                }
+            }
+
+            return View(model);
+        }
+
+        public IActionResult MyProfile()
+        {
+            var nameClaim = User.FindFirst(ClaimTypes.Name);
+            var phoneClaim = User.FindFirst("Phone");
+            var usernameClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (usernameClaim == null)
+                return Unauthorized();
+
+            var profile = new UserProfile
+            {
+                Name = nameClaim?.Value ?? "Unknown",
+                Phone = phoneClaim?.Value ?? "N/A",
+                Username = usernameClaim.Value
+            };
+
+            return View(profile);
         }
     }
 

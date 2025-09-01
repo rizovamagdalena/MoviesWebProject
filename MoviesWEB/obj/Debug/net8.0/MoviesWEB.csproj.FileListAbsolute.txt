@@ -235,3 +235,4 @@ C:\Users\rizov\VisualStudioProjects\MoviesWEB\MoviesWEB\obj\Debug\net8.0\refint\
 C:\Users\rizov\VisualStudioProjects\MoviesWEB\MoviesWEB\obj\Debug\net8.0\MoviesWEB.pdb
 C:\Users\rizov\VisualStudioProjects\MoviesWEB\MoviesWEB\obj\Debug\net8.0\MoviesWEB.genruntimeconfig.cache
 C:\Users\rizov\VisualStudioProjects\MoviesWEB\MoviesWEB\obj\Debug\net8.0\ref\MoviesWEB.dll
+C:\Users\rizov\VisualStudioProjects\MoviesWEB\MoviesWEB\obj\Debug\net8.0\MoviesWEB.sourcelink.json

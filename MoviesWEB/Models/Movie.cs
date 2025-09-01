@@ -12,8 +12,9 @@
         public string Actors { get; set; }
         public string Directors { get; set; }
         public string Genres { get; set; }
-        public double Rating { get; set; }
-        public int UserRating { get; set; } 
+        public List<MovieRating> Ratings { get; set; }
+        public decimal Rating { get; set; }
+        public MovieRating UserRating { get; set; } 
 
     }
 

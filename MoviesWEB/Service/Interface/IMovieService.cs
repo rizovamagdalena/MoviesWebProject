@@ -16,8 +16,8 @@ namespace MoviesWEB.Service.Interface
         Task<bool> CreateFutureMovieAsync(CreateFutureMovie createMovie);
         Task<bool> DeleteFutureMovieAsync(int id);
         Task<List<String>> GetAllGenres();
-        Task<(bool success, string message)> UpdateUserRating(long movieId, long userId, int rating);
-        Task<int> GetUserRatingForMovie(long movieId,long userId);
+        Task<(bool success, string message)> UpdateUserRating(long movieId, long userId, int rating,string comment);
+        Task<MovieRating> GetUserRatingForMovie(long movieId,long userId);
         Task<List<Movie>> GetTopNMoviesAsync(int n);
     }
 }

@@ -47,6 +47,7 @@ namespace MoviesWEB.Controllers
                 movies = await _movieService.GetMoviesByGenreAsync(genre);
             }
             System.Diagnostics.Debug.WriteLine($"In  index controller:{movies}");
+            movies = movies.OrderByDescending(m => m.Rating);
 
             ViewBag.SelectedGenre = genre ?? "All";
             ViewData["genres"] = allGenres;
@@ -114,29 +115,7 @@ namespace MoviesWEB.Controllers
             return View(movie);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> AddTicket(CreateTicket createRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Index", "Movies");
-            }
-
-            bool success = await _movieService.AddTicketAsync(createRequest);
-
-            if (success)
-            {
-                TempData["SuccessMessage"] = $"{createRequest.Price} ticket(s) added to cart.";
-                return RedirectToAction("Details", "Movies", new { id = createRequest.Movie_Id });
-            }
-            else
-            {
-                ModelState.AddModelError("", "Error adding tickets.");
-                return RedirectToAction("Index", "Movies");
-            }
-        }
 
 
         // GET: MoviesController/Edit/5
@@ -322,6 +301,8 @@ namespace MoviesWEB.Controllers
         {
             public long MovieId { get; set; }
             public int Rating { get; set; }
+            public string Comment { get; set; }
+
         }
 
         [HttpPost]
@@ -335,7 +316,7 @@ namespace MoviesWEB.Controllers
 
             var userId = long.Parse(userIdClaim);
 
-            var (success, message) = await _movieService.UpdateUserRating(request.MovieId, userId, request.Rating);
+            var (success, message) = await _movieService.UpdateUserRating(request.MovieId, userId, request.Rating,request.Comment);
 
             return Ok(new { success, message });
         }
